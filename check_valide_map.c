@@ -1,5 +1,5 @@
 #include "get_next_line.h"
-
+    
 int is_rectangular(char **map, int length_line)
 {
     int rows = 0;
@@ -74,8 +74,6 @@ int check_if_one_player_exit(char **map, int length, int rows)
     }
     return (has_palyer == 1 && hase_exit == 1);
 }
-
-
 int validate_map(char **map, int rows)
 {
     int cols = 0;

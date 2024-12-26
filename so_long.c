@@ -1,6 +1,24 @@
 #include "so_long.h"
 
-int main()
+
+int check_filemane(char *file_name)
+{
+    int i = 0;
+    char *str;
+
+    str = ".ber";
+    file_name = file_name - (ft_strlen(file_name) - 4);
+    while (file_name[i])
+    {
+        if (file_name[i] != str[i])
+            return 0;
+        i++;
+    }
+    return 1;
+}
+int check_open_in_file(char *file_name);
+
+int main(int ac, char **av)
 {
     int fd = open("maps.ber", O_RDONLY);
     if (fd < 0)
@@ -11,24 +29,24 @@ int main()
     close(fd);
     fd = open("maps.ber", O_RDONLY);
     if (fd < 0)
-        return (perror("Error reopening file"),1);
+         return (perror("Error reopening file"),1);
     char **map = full_map(fd, rows);
     close(fd);
-    
     if (validate_map(map, rows)) 
-        printf("The map is valid.\n");
+         printf("The map is valid.\n");
     else
-        return (printf("The map is invalid.\n"), ft_free(map, rows), 1);
-    void *mlx = mlx_init();
-    if (mlx == NULL)
+         return (printf("The map is invalid.\n"), ft_free(map, rows), 1);
+    t_data data;
+    data.mlx = mlx_init();
+    if (data.mlx == NULL)
         return (perror("Error initializing MLX"), ft_free(map, rows), 1);
-    void *mlx_win = mlx_new_window(mlx, calcule_columes(map, rows) * 64, rows * 64, "so_long");
-    void *img;
+    void *mlx_win = mlx_new_window(data.mlx, calcule_columes(map, rows) * 64, rows * 64, "so_long");
     int img_w, img_h;
-    img = mlx_xpm_file_to_image(mlx, "wall.xmp", &img_w, &img_h);
-    if (img == NULL) {
+    data.imag_wall = mlx_xpm_file_to_image(data.mlx, "wall.xmp", &data.img_w, &data.img_h);
+    data.imag_plyer = mlx_xpm_file_to_image(data.mlx, "plyer.xpm", &data.img_w, &data.img_h);
+    if (data.imag_wall == NULL  || data.imag_plyer == NULL) {
         perror("Error loading image");
-        mlx_destroy_window(mlx, mlx_win);
+        mlx_destroy_window(data.mlx, mlx_win);
         ft_free(map, rows);
         return 1;
     }
@@ -39,13 +57,15 @@ int main()
         while (y < calcule_columes(map, rows))
         {
             if (map[x][y] == '1')
-                mlx_put_image_to_window(mlx, mlx_win, img, y * 64, x * 64);
+                mlx_put_image_to_window(data.mlx, mlx_win, data.imag_wall, y * 64, x * 64);
+                if (map[x][y] == 'P')
+                mlx_put_image_to_window(data.mlx, mlx_win, data.imag_plyer, y * 64, x * 64);
             y++;
         }
         x++;
     }
 
-    mlx_loop(mlx);
+    mlx_loop(data.mlx);
     ft_free(map, rows);
     return 0;
 }

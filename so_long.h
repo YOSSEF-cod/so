@@ -13,6 +13,23 @@
 #define START 'P'
 #define EXIT 'E'
 
+typedef struct s_data
+{
+    void *imag_wall;
+    void *imag_plyer;
+    void *imag_exit;
+    void *mlx;
+    int img_w;
+    int img_h;
+} t_data;
+
+typedef struct s_map
+{
+    int fd;
+    int rows;
+    char **map;
+} t_map;
+
 int count_line(int fd);
 int is_rectangular(char **map, int length);
 

@@ -5,7 +5,7 @@ LIBS =  -lmlx -lXext -lX11 -lm -lbsd
 
 SIRC = so_long.c get_next_line.c get_next_line_utils.c check_valide_map.c
 OBJS = $(SIRC:.c=.o)
-
+	
 all:	$(NAME)
 
 $(NAME): $(OBJS)
